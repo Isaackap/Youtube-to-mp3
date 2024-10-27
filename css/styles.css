@@ -46,7 +46,6 @@ h1{
 
 .btn{
     border-radius: 30px;
-    background: #0d6efd;
     color: #fff;
     outline: 0;
     border: 0;
@@ -54,6 +53,10 @@ h1{
     margin: 1rem 0;
     display: inline-block;
     width: 45%;
+}
+
+.btn-convert{
+    background: #0d6efd;
 }
 
 .btn-clear{
