@@ -10,7 +10,7 @@
   <body>
     <form class="form-convert">
       <h1>Convert YouTube to mp3 file</h1>
-      <div class="form-group">
+      <div class="form-group" id="input-container">
         <input
           type="url"
           name="URL"
@@ -18,10 +18,22 @@
           placeholder="Insert YouTube Video URL"
           maxlength="125"
         />
-        <button class="btn btn-convert" type="submit">Convert</button>
+        <button
+          class="btn btn-convert"
+          type="button"
+          id="convert"
+          onclick="startConversion()"
+        >
+          Convert
+        </button>
         <button class="btn btn-clear" type="reset">Clear</button>
       </div>
     </form>
-    <script src="index.js"></script>
+    <form class="form-download">
+      <h1>Download mp3 File</h1>
+      <div class="download-container"></div>
+    </form>
+    <script type="module" src="app.js"></script>
+    <script type="module" src="server.js"></script>
   </body>
 </html>

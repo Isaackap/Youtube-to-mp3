@@ -22,6 +22,10 @@ h1{
     width: 100%;
 }
 
+.form-download{
+    display: none;
+}
+
 .form-group{
     margin: 2rem 0;
 }
