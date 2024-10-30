@@ -1,7 +1,3 @@
-const EventEmitter = require('events');
-const emitter = new EventEmitter();
-
-import { videoConversion } from './server.js';
 
 function startConversion(){
     
@@ -16,6 +12,8 @@ function startConversion(){
 
     document.getElementById("input-container").style.display = "none";
 
-    videoConversion(youtubeURL);
+    //videoConversion(youtubeURL);
+    
+    //fetch an api call to backend
 
 }
