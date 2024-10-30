@@ -1,9 +1,16 @@
 const fs = require('fs');
-const ytdl = require('ytdl-core');
+const ytdl = require('@distube/ytdl-core');
 
-export function videoConversion(youtubeURL){
+function videoConversion(youtubeURL){
 
-    const convertedFile = ytdl(youtubeURL).pipe(fs.createWriteStream('video.mp4'));
+    const convertedFile = ytdl(youtubeURL, { quality: 'highestaudio' });             //on("progress", (_,downloaded,total)=>console.log(downloaded));                //pipe(fs.createWriteStream('video.mp4'));
     
+    convertedFile.on("progress", (_,downloaded,total)=>console.log(`${Math.round((downloaded/total) * 100)} %`));
+    convertedFile.on("error", (error)=>console.log(error));
+    convertedFile.pipe(fs.createWriteStream('video.mp4'));
+
     console.log('test');
+
 }
+
+videoConversion('https://www.youtube.com/watch?v=XPnwmZ6gf6I');
