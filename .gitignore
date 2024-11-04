@@ -1,3 +1,5 @@
 node_modules
 *video.mp4
 *video.mp3
+*.mp3
+*.mp4

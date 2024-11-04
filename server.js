@@ -1,16 +1,29 @@
 const express = require('express');
 const fs = require('fs');
 const ytdl = require('@distube/ytdl-core');
+const app = express();
 
 function videoConversion(youtubeURL){
 
-    const convertedFile = ytdl(youtubeURL, { quality: 'highestaudio' });             //on("progress", (_,downloaded,total)=>console.log(downloaded));                //pipe(fs.createWriteStream('video.mp4'));
-    
-    convertedFile.on("progress", (_,downloaded,total)=>console.log(`${Math.round((downloaded/total) * 100)} %`));
-    convertedFile.on("error", (error)=>console.log(error));
-    convertedFile.pipe(fs.createWriteStream('video.mp3'));
+    const convertedFile = ytdl(youtubeURL, { quality: 'highestaudio' });
 
-    console.log('test');
+    async function getVideoTitle(youtubeURL) {
+        try{
+            const info = await ytdl.getBasicInfo(youtubeURL);
+            return info.videoDetails.title;
+        }catch(error){
+            console.error("Error fetching video info:", error);
+            throw error;
+        }
+        
+    }
+
+    getVideoTitle(youtubeURL).then(videoTitle => {
+        const sanitizedTitle = videoTitle.replace(/[\/:*?"<>|]/g, '');
+        //convertedFile.on("progress", (_,downloaded,total)=>console.log(`${Math.round((downloaded/total) * 100)} %`));
+        //convertedFile.on("error", (error)=>console.log(error));
+        convertedFile.pipe(fs.createWriteStream(`${sanitizedTitle}.mp3`));
+    });
 
 }
 
