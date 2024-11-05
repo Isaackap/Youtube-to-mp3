@@ -2,6 +2,10 @@ const express = require('express');
 const fs = require('fs');
 const ytdl = require('@distube/ytdl-core');
 const app = express();
+const Joi = require('joi');
+const PORT = 3000;
+
+app.use(express.json());
 
 function videoConversion(youtubeURL){
 
