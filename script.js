@@ -10,24 +10,21 @@ document.getElementById("convert").addEventListener('click', async() =>{
     }
 
     try{
-
-        const response = await fetch(`/convert?url=${encodeURIComponent(youtubeURL)}`,{
-            method: 'GET',
-            headers:{
-                'Content-type': 'application/json'
-            }
+        const response = await fetch('/convert', {
+            method: 'POST',
+            body: JSON.stringify({youtubeURL}),
+            headers: {'Content-Type': 'application/json'}   
         });
 
         if(response.ok){
             const data = await response.json();
+            console.log('success');
         } else{
             const errorData = await response.json();
         }
 
     } catch(error){
-
         console.log("Request failed: ", error);
-
     }
 
 });
