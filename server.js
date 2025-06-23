@@ -16,6 +16,10 @@ app.post('/convert', (req, res) => {
     console.log("Request received:", req.body);
     const {youtubeURL} = req.body;
 
+    if(!youtubeURL || !ytdl.validateURL(youtubeURL)){
+        return res.status(400).json({error: "Invalid YouTube URL."});
+    }
+
     try{
         convertedFile = ytdl(youtubeURL, { quality: 'highestaudio' });
 
@@ -34,6 +38,11 @@ app.post('/convert', (req, res) => {
         getVideoTitle(youtubeURL).then(videoTitle => {
             const sanitizedTitle = videoTitle.replace(/[\/:*?"<>|]/g, '');
             const saveFile = convertedFile.pipe(fs.createWriteStream(`public/converted_files/${sanitizedTitle}.mp3`));
+            // Makes directory if doesn't already exist
+            const outputDir = path.join(__dirname, 'public', 'converted_files');
+            if(!fs.existsSync(outputDir)){
+                fs.mkdirSync(outputDir, {recursive: true});
+            }
                 
             saveFile.on('finish', () =>{
                 console.log("File saved successfully");
