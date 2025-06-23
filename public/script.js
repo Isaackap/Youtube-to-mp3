@@ -28,14 +28,11 @@ var onClick = async(event) =>{
             if(response.ok){
                 var data = await response.json();
                 console.log("success", data);
-                //localStorage.setItem('savedFile', data.fileName);
-                //let file = localStorage.getItem('savedFile');
-                //console.log(file);
+                localStorage.setItem('savedFile', data.fileName);
+                let file = localStorage.getItem('savedFile');
+                console.log(file);
                 document.getElementById('form-convert').style.display = "none";
-                /*let elements = document.getElementsByClassName('form-convert');
-                for(let i = 0; i < elements.length; i++){
-                    elements[i].style.display = 'none';
-                }*/
+                document.getElementById('form-download').style.display = "block";
             } else{
                 console.error("Error response: ", await response.json());
             }
