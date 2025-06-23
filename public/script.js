@@ -8,13 +8,11 @@ var onClick = async(event) =>{
     var youtubeURL = document.getElementById('url').value;
     var urlCheck = youtubeURL.match(/:\/\/www.youtube.com\/.*?\bv=([^&]+)/)
 
-    if(!youtubeURL){
+    if(!youtubeURL || !urlCheck){
 
         alert("Please enter a valid YouTube URL.");
         return;
-
-    }else if(!urlCheck){
-        alert("Please enter a valid Youtube URL");
+        
     }else{
 
         try{
@@ -33,6 +31,7 @@ var onClick = async(event) =>{
                 //localStorage.setItem('savedFile', data.fileName);
                 //let file = localStorage.getItem('savedFile');
                 //console.log(file);
+                document.getElementById('form-convert').style.display = "none";
                 /*let elements = document.getElementsByClassName('form-convert');
                 for(let i = 0; i < elements.length; i++){
                     elements[i].style.display = 'none';
