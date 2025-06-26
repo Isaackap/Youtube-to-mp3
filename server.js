@@ -37,14 +37,15 @@ app.post('/convert', (req, res) => {
         }
 
         getVideoTitle(youtubeURL).then(videoTitle => {
+            // Makes directory if doesn't already exist
+            const outputDir = path.join(__dirname, 'temp', 'converted_files');
+            if(!fs.existsSync(outputDir)){
+                fs.mkdirSync(outputDir, {recursive: true});
+            }
+            
             const sanitizedTitle = videoTitle.replace(/[\/:*?"<>|]/g, '');
             const tempPath = path.join(__dirname, 'temp', 'converted_files', `${sanitizedTitle}.mp3`);
             const saveFile = convertedFile.pipe(fs.createWriteStream(tempPath));
-            // Makes directory if doesn't already exist
-            /*const outputDir = path.join(__dirname, 'temp', 'converted_files');
-            if(!fs.existsSync(outputDir)){
-                fs.mkdirSync(outputDir, {recursive: true});
-            }*/
                 
             saveFile.on('finish', () =>{
                 console.log("File saved successfully");
