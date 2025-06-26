@@ -37,19 +37,32 @@ app.post('/convert', (req, res) => {
 
         getVideoTitle(youtubeURL).then(videoTitle => {
             const sanitizedTitle = videoTitle.replace(/[\/:*?"<>|]/g, '');
-            const saveFile = convertedFile.pipe(fs.createWriteStream(`public/converted_files/${sanitizedTitle}.mp3`));
+            const tempPath = path.join(__dirname, 'temp', 'converted_files', `${sanitizedTitle}.mp3`);
+            const saveFile = convertedFile.pipe(fs.createWriteStream(tempPath));
             // Makes directory if doesn't already exist
-            const outputDir = path.join(__dirname, 'public', 'converted_files');
+            /*const outputDir = path.join(__dirname, 'temp', 'converted_files');
             if(!fs.existsSync(outputDir)){
                 fs.mkdirSync(outputDir, {recursive: true});
-            }
+            }*/
                 
             saveFile.on('finish', () =>{
                 console.log("File saved successfully");
+
+                const timeoutTime = 5 * 60 * 1000; // 5 minutes
+                setTimeout(() => {
+                    fs.unlink(tempPath, (err) => {
+                        if(err){
+                            console.error(`Failed to delete ${tempPath}:`, err);
+                        }else{
+                            console.error(`Deleted expired file: ${tempPath}`);
+                        }
+                    });
+                }, timeoutTime);
+
                 res.json({
                     message: "File saved successfully",
                     fileName: `${sanitizedTitle}.mp3`,
-                    fileURL: `/converted_files/${sanitizedTitle}.mp3`
+                    fileURL: `/download/${sanitizedTitle}.mp3`
                 });
             })
 
@@ -57,6 +70,10 @@ app.post('/convert', (req, res) => {
                 console.error("Error saving file: ", error);
                 res.status(500).json({error: "Error saving file"});
             });
+
+            //setTimeout(() => {
+             //   fs.unlink()
+            //});
             
         }).catch(err => {
             console.error("Error fetching video info: ", err);
@@ -68,6 +85,20 @@ app.post('/convert', (req, res) => {
         res.sendStatus(500);
     }
 
+});
+
+app.get('/download/:filename', (req, res) => {
+  const { filename } = req.params;
+  const filePath = path.join(__dirname, 'temp', 'converted_files', filename);
+
+  console.log("Attempting to download: ", filePath);
+
+  res.download(filePath, filename, (err) => {
+    if (err) {
+      console.error("Download error:", err);
+      res.status(404).send("File not found");
+    }
+  });
 });
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

@@ -70,7 +70,7 @@ document.getElementById('download').addEventListener('click', () => {
     const file = localStorage.getItem('savedFile');
     if(file){
         const a = document.createElement('a');
-        a.href = `converted_files/${file}`;
+        a.href = `/download/${file}`;
         a.download = file;
         document.body.appendChild(a);
         a.click();
