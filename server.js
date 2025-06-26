@@ -12,6 +12,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Call to convert url to .mp3
 app.post('/convert', (req, res) => {
     console.log("Request received:", req.body);
     const {youtubeURL} = req.body;
@@ -48,6 +49,7 @@ app.post('/convert', (req, res) => {
             saveFile.on('finish', () =>{
                 console.log("File saved successfully");
 
+                // Set timer for converted files to expire/delete
                 const timeoutTime = 5 * 60 * 1000; // 5 minutes
                 setTimeout(() => {
                     fs.unlink(tempPath, (err) => {
@@ -70,10 +72,6 @@ app.post('/convert', (req, res) => {
                 console.error("Error saving file: ", error);
                 res.status(500).json({error: "Error saving file"});
             });
-
-            //setTimeout(() => {
-             //   fs.unlink()
-            //});
             
         }).catch(err => {
             console.error("Error fetching video info: ", err);
@@ -87,6 +85,7 @@ app.post('/convert', (req, res) => {
 
 });
 
+// Call to download the file
 app.get('/download/:filename', (req, res) => {
   const { filename } = req.params;
   const filePath = path.join(__dirname, 'temp', 'converted_files', filename);
