@@ -42,7 +42,7 @@ This is a full-stack YouTube to MP3 converter built with **Node.js**, **Express*
 
 1. Clone this repo:
    ```bash
-   git clone https://github.com/Isaackap/youtube-to-mp3.git
+   git clone https://github.com/Isaackap/Youtube-to-mp3.git
    cd youtube-to-mp3
 2. Build and run the container:
    ```bash
